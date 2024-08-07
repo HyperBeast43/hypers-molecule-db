@@ -82,32 +82,32 @@ function visitDrawer(atom, bond) {
     const x1 = x0 + spacing;
     const x2 = x1 + spacing;
     if (bond) {
-        bond(x0, 50 + spacing * 5, 'n');
-        bond(x1, 50 + spacing * 5, 'ryk');
-        bond(x0, 50 + spacing * 6, 'r');
-        bond(x1, 50 + spacing * 6, 'k');
-        bond(x2, 50 + spacing * 6, 'y');
-        bond(x0, 50 + spacing * 7, 'ky');
-        bond(x1, 50 + spacing * 7, 'ry');
-        bond(x2, 50 + spacing * 7, 'rk');
+        bond(x0, 55 + spacing * 5, 'n');
+        bond(x1, 55 + spacing * 5, 'ryk');
+        bond(x0, 55 + spacing * 5 + 71, 'r');
+        bond(x1, 55 + spacing * 5 + 71, 'k');
+        bond(x2, 55 + spacing * 5 + 71, 'y');
+        bond(x0, 55 + spacing * 5 + 71 * 2, 'ky');
+        bond(x1, 55 + spacing * 5 + 71 * 2, 'ry');
+        bond(x2, 55 + spacing * 5 + 71 * 2, 'rk');
     }
     if (atom) {
-        atom(x0, 50, 'salt');
-        atom(x1, 50, 'air');
-        atom(x2, 50, 'fire');
-        atom(x0, 50 + spacing, 'quicksilver');
-        atom(x1, 50 + spacing, 'water');
-        atom(x2, 50 + spacing, 'earth');
-        atom(x0, 50 + spacing * 2, 'lead');
-        atom(x1, 50 + spacing * 2, 'tin');
-        atom(x2, 50 + spacing * 2, 'iron');
-        atom(x0, 50 + spacing * 3, 'copper');
-        atom(x1, 50 + spacing * 3, 'silver');
-        atom(x2, 50 + spacing * 3, 'gold');
-        atom(x0, 50 + spacing * 4, 'vitae');
-        atom(x1, 50 + spacing * 4, 'mors');
-        atom(x2, 50 + spacing * 4, 'quintessence');
-        atom(x2, 50 + spacing * 5, 'repeat');
+        atom(x0, 55, 'salt');
+        atom(x1, 55, 'air');
+        atom(x2, 55, 'fire');
+        atom(x0, 55 + spacing, 'quicksilver');
+        atom(x1, 55 + spacing, 'water');
+        atom(x2, 55 + spacing, 'earth');
+        atom(x0, 55 + spacing * 2, 'lead');
+        atom(x1, 55 + spacing * 2, 'tin');
+        atom(x2, 55 + spacing * 2, 'iron');
+        atom(x0, 55 + spacing * 3, 'copper');
+        atom(x1, 55 + spacing * 3, 'silver');
+        atom(x2, 55 + spacing * 3, 'gold');
+        atom(x0, 55 + spacing * 4, 'vitae');
+        atom(x1, 55 + spacing * 4, 'mors');
+        atom(x2, 55 + spacing * 4, 'quintessence');
+        atom(x2, 55 + spacing * 5, 'repeat');
     }
 }
 
