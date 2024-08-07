@@ -1,0 +1,26 @@
+[package]
+name = "molecule-db"
+version = "0.1.0"
+edition = "2021"
+
+[profile.release]
+lto = true
+strip = true
+
+[lints.rust]
+rust_2018_idioms = "deny"
+unsafe_code = "forbid"
+unused = "deny"
+unused_crate_dependencies = "deny"
+unused_import_braces = "deny"
+unused_lifetimes = "deny"
+unused_qualifications = "deny"
+warnings = "deny"
+
+[dependencies]
+collect-mac = "0.1.0"
+enum-iterator = "2.1.0"
+itertools = "0.13.0"
+omsim-rs = { git = "https://github.com/fenhl/omsim-rs.git", branch = "dev-fenhl" }
+rocket = "0.5.1"
+rocket-util = { git = "https://github.com/fenhl/rocket-util", branch = "main" }
