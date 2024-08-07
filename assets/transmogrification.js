@@ -648,7 +648,14 @@ async function updateDownload() {
         body: JSON.stringify(state),
     }));
     if (response.ok) {
-        document.getElementById('result').textContent = JSON.stringify(await response.json());
+        let data = await response.json();
+        if (data.appearances.length === 0) {
+            document.getElementById('result').textContent = 'unknown molecule';
+        } else {
+            document.getElementById('result').innerHTML = data.appearances
+                .map(JSON.stringify)
+                .join('<br />');
+        }
     } else {
         throw new Error('molecule lookup failed');
     }
