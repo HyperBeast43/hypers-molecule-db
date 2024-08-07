@@ -404,10 +404,6 @@ function visitBondForValidation(state, result, stack, visited, p, u, v) {
     const bond = state[bondKey];
     if (!bond)
         return;
-    if (bond === 'ryk' && (state[`${p[0]},${p[1]}`] !== 'fire' || state[`${p[0]+u},${p[1]+v}`] !== 'fire')) {
-        result.error = 'triplex may bond only fire atoms';
-        return;
-    }
     const bondNeighborJSON = JSON.stringify(bondNeighbor);
     if (visited.has(bondNeighborJSON))
         return;
@@ -423,11 +419,7 @@ function validateState(state) {
         return a.length === 2;
     });
     if (atomPositions.length === 0) {
-        result.error = 'reagent must contain at least one atom';
-        return result;
-    }
-    if (atomPositions.length > 3) {
-        result.error = 'reagent may contain at most three atoms';
+        result.empty = true;
         return result;
     }
     const stack = [atomPositions[0]];
@@ -442,7 +434,7 @@ function validateState(state) {
         visitBondForValidation(state, result, stack, visited, p, 1, -1);
     }
     if (!result.error && visited.size !== atomPositions.length)
-        result.error = 'all atoms in reagent must be connected by bonds';
+        result.error = 'all atoms in molecule must be connected by bonds';
     return result;
 }
 function triangular(index) {
@@ -631,67 +623,35 @@ function pushHex(bytes, string) {
     for (let i = 0; i < string.length; i += 2)
         bytes.push(parseInt(string.substr(i, 2), 16));
 }
-function updateDownload() {
+async function updateDownload() {
     const validationResult = validateState(state);
-    if (validationResult.error) {
+    if (validationResult.empty) {
+        document.getElementById('default').style.display = '';
+        document.getElementById('error').textContent = '';
+        document.getElementById('result').style.display = 'none';
+        return;
+    } else if (validationResult.error) {
+        document.getElementById('default').style.display = 'none';
         document.getElementById('error').textContent = validationResult.error;
-        document.getElementById('download').parentNode.style.display = 'none';
+        document.getElementById('result').style.display = 'none';
         return;
     } else {
+        document.getElementById('default').style.display = 'none';
         document.getElementById('error').textContent = '';
-        document.getElementById('download').parentNode.style.display = '';
+        document.getElementById('result').style.display = '';
     }
-    let st = state;
-    let minState = st;
-    let minNumber = null;
-    for (let i = 0; i < 6; ++i) {
-        const n = stateToNumber(st);
-        if (enumeration.has(n)) {
-            minNumber = enumeration.get(n);
-            minState = stateForEnumerationIndex(minNumber);
-            break;
-        }
-        st = rotateStateCCW(st);
+    let response = await fetch(new Request('/api/v1/molecule-from-state', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(state),
+    }));
+    if (response.ok) {
+        document.getElementById('result').textContent = JSON.stringify(await response.json());
+    } else {
+        throw new Error('molecule lookup failed');
     }
-    const bytes = [ 3, 0, 0, 0 ];
-    pushHex(bytes, '1B544F4E4943204F46205452414E534D4F4752494649434154494F4E'); // puzzle name
-    bytes.push(0, 0, 0, 0, 0, 0, 0, 0); // steam creator id (leave blank)
-    bytes.push(0x0F, 0x37, 0xC3, 0x17, 0, 0, 0, 0); // allowed parts
-    bytes.push(1, 0, 0, 0); // number of inputs
-    const atomPositions = sortedAtomPositions(minState);
-    bytes.push(atomPositions.length, 0, 0, 0); // number of atoms
-    for (const p of atomPositions) {
-        bytes.push(Number(atomEncoding[minState[`${p[0]},${p[1]}`]] + 1n));
-        bytes.push((p[0] + 256) & 0xff);
-        bytes.push((p[1] + 256) & 0xff);
-    }
-    const bonds = Object.keys(minState).map(function (key) {
-        return key.split(':').map(function (bond) {
-            return bond.split(',').map(function (n) {
-                return parseInt(n, 10);
-            });
-        });
-    }).filter(function (bond) {
-        return bond.length === 2;
-    });
-    bytes.push(bonds.length, 0, 0, 0); // number of bonds
-    for (const bond of bonds) {
-        if (minState[`${bond[0][0]},${bond[0][1]}:${bond[1][0]},${bond[1][1]}`] === 'ryk')
-            bytes.push(14);
-        else
-            bytes.push(1);
-        bytes.push((bond[0][0] + 256) & 0xff);
-        bytes.push((bond[0][1] + 256) & 0xff);
-        bytes.push((bond[1][0] + 256) & 0xff);
-        bytes.push((bond[1][1] + 256) & 0xff);
-    }
-    bytes.push(1, 0, 0, 0); // number of outputs
-    pushHex(bytes, '080000000D00000D01000D02FE0D03FE0201FF0202FF0102000101FE090000000101FE01FF0101FF02FE0102FE02FF0102FF03FE0101FF02FF0101FF010001000001FF01010002FF0102FF0200'); // output
-    bytes.push(1, 0, 0, 0); // output multiplier
-    bytes.push(0); // not a production puzzle
-    document.getElementById('download').href = `data:application/octet-stream;base64,${btoa(String.fromCharCode(...bytes))}`;
-    document.getElementById('download').download = `OM2023Weeklies_TransTonic_${`000${minNumber + 1}`.slice(-4)}.puzzle`;
-    document.getElementById('download').textContent = document.getElementById('download').download;
 }
 function rotateCCW(point) {
     if (point.length !== 2)
@@ -720,19 +680,19 @@ function rotateStateCCW(state) {
         rotated[keyForBond(canonicalizeBond(key.split(':').map(function (entry) { return rotateCCW(entry.split(',')); })))] = state[key];
     return rotated;
 }
-window.addEventListener('mousemove', function (e) {
+window.addEventListener('mousemove', async function (e) {
     const r = canvas.getBoundingClientRect();
     mouseX = e.clientX - r.left;
     mouseY = e.clientY - r.top;
     updateNextState();
     redraw();
     if (mouseDown)
-        updateDownload();
+        await updateDownload();
 });
 canvas.addEventListener('contextmenu', function (e) {
     e.preventDefault();
 });
-canvas.addEventListener('mousedown', function (e) {
+canvas.addEventListener('mousedown', async function (e) {
     mouseDown = true;
     if (e.button === 2) {
         erasing = true;
@@ -740,7 +700,7 @@ canvas.addEventListener('mousedown', function (e) {
     }
     state = nextState;
     redraw();
-    updateDownload();
+    await updateDownload();
 });
 window.addEventListener('mouseup', function (e) {
     mouseDown = false;

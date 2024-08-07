@@ -25,9 +25,6 @@ canvas {
     -ms-user-select: none;
     user-select: none;
 }
-main > div > p {
-    margin-right: -264px; /* drawerWidth */
-}
 p#error {
     font-weight: bold;
 }

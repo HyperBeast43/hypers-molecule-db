@@ -5,18 +5,31 @@ use {
             self,
             *,
         },
+        collections::{
+            HashMap,
+            HashSet,
+        },
     },
     enum_iterator::all,
     itertools::Itertools as _,
     omsim_rs::data::*,
-    rocket::response::content::{
-        RawCss,
-        RawHtml,
-        RawJavaScript,
+    rocket::{
+        http::Status,
+        response::content::{
+            RawCss,
+            RawHtml,
+            RawJavaScript,
+        },
+        serde::json::Json,
+        uri,
     },
     rocket_util::{
         Doctype,
         html,
+    },
+    serde::{
+        Deserialize,
+        Serialize,
     },
     crate::util::IteratorExt as _,
 };
@@ -24,6 +37,7 @@ use {
 mod molecules;
 mod util;
 
+#[derive(Serialize)]
 enum InOut {
     Reagent,
     Product,
@@ -43,7 +57,13 @@ impl MoleculeExt for Molecule {
             q: self.atoms.keys().map(|&HexIndex { q, .. }| q).min().unwrap_or_default(),
             r: self.atoms.keys().map(|&HexIndex { r, .. }| r).min().unwrap_or_default(),
         };
-        self.mapped_positions(|pos| pos - offset)
+        let mut normalized = self.mapped_positions(|pos| pos - offset);
+        normalized.bonds = normalized.bonds.into_iter().map(|Bond { start, end, ty }| Bond {
+            start: if (start.q, start.r) <= (end.q, end.r) { start } else { end },
+            end: if (start.q, start.r) <= (end.q, end.r) { end } else { start },
+            ty,
+        }).collect();
+        normalized
     }
 
     fn normalized(&self) -> Self {
@@ -174,6 +194,28 @@ impl MoleculeExt for Molecule {
     }
 }
 
+fn parse_atom(s: &str) -> Option<Atom> {
+    match s {
+        "Salt" | "salt" => Some(Atom::Salt),
+        "Air" | "air" => Some(Atom::Air),
+        "Earth" | "earth" => Some(Atom::Earth),
+        "Fire" | "fire" => Some(Atom::Fire),
+        "Water" | "water" => Some(Atom::Water),
+        "Quicksilver" | "quicksilver" => Some(Atom::Quicksilver),
+        "Gold" | "gold" => Some(Atom::Gold),
+        "Silver" | "silver" => Some(Atom::Silver),
+        "Copper" | "copper" => Some(Atom::Copper),
+        "Iron" | "iron" => Some(Atom::Iron),
+        "Tin" | "tin" => Some(Atom::Tin),
+        "Lead" | "lead" => Some(Atom::Lead),
+        "Vitae" | "vitae" => Some(Atom::Vitae),
+        "Mors" | "mors" => Some(Atom::Mors),
+        "Repeat" | "repeat" => Some(Atom::Repeat),
+        "Quintessence" | "quintessence" => Some(Atom::Quintessence),
+        _ => None,
+    }
+}
+
 fn format_atom(atom: Atom) -> &'static str {
     match atom {
         Atom::Salt => "salt",
@@ -209,18 +251,84 @@ fn index() -> RawHtml<String> {
                 script(defer, src = "/static/transmogrification.js");
             }
             body {
-                main {
+                main(style = "flex-direction: column;") {
                     div {
-                        h2 : "CHOOSE YOUR REAGENT (UP TO THREE ATOMS)";
+                        h2 : "ENTER MOLECULE TO LOOK UP";
                         canvas(id = "current");
-                        p(style = "display: none;") {
-                            : "download: ";
-                            a(id = "download", href = "#");
-                            : " (";
-                            a(href = "http://events.critelli.technology/static/where.html") : "where do i put this?)";
-                        }
+                        p(id = "result", style = "display: none;");
                         p(id = "error");
                     }
+                    ul(id = "default") {
+                        li {
+                            a(href = uri!(molecules_list).to_string()) : "List of all molecules";
+                        }
+                    }
+                }
+                canvas(id = "next", style = "display: none;");
+            }
+        }
+    }
+}
+
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct JsState {
+    #[allow(unused)] selected_atom: Option<String>,
+    #[allow(unused)] selected_bond: Option<String>,
+    #[serde(flatten)]
+    rest: HashMap<String, String>,
+}
+
+#[derive(Serialize)]
+struct MoleculeResponse {
+    appearances: Vec<(String, InOut, String)>,
+}
+
+#[rocket::post("/api/v1/molecule-from-state", format = "json", data = "<state>")]
+fn molecule_from_state(state: Json<JsState>) -> Result<Json<MoleculeResponse>, Status> {
+    let Json(JsState { rest, .. }) = state;
+    let mut molecule = Molecule { atoms: HashMap::default(), bonds: HashSet::default() };
+    for (key, value) in rest {
+        if let Some((start, end)) = key.split_once(':') {
+            let (q1, r1) = start.split_once(',').ok_or(Status::BadRequest)?;
+            let (q2, r2) = end.split_once(',').ok_or(Status::BadRequest)?;
+            molecule.bonds.insert(Bond {
+                start: HexIndex { q: q1.parse().map_err(|_| Status::BadRequest)?, r: r1.parse().map_err(|_| Status::BadRequest)? },
+                end: HexIndex { q: q2.parse().map_err(|_| Status::BadRequest)?, r: r2.parse().map_err(|_| Status::BadRequest)? },
+                ty: if value == "n" {
+                    BondType::Normal
+                } else {
+                    BondType::Triplex { red: value.contains('r'), black: value.contains('k'), yellow: value.contains('y') }
+                },
+            });
+        } else {
+            let (q, r) = key.split_once(',').ok_or(Status::BadRequest)?;
+            molecule.atoms.insert(HexIndex { q: q.parse().map_err(|_| Status::BadRequest)?, r: r.parse().map_err(|_| Status::BadRequest)? }, parse_atom(&value).ok_or(Status::BadRequest)?);
+        }
+    }
+    let molecule = molecule.normalized();
+    for (iter_molecule, appearances) in molecules::molecules() {
+        if iter_molecule == molecule {
+            return Ok(Json(MoleculeResponse { appearances: appearances.into_iter().map(|(puzzle_name, inout, name)| (puzzle_name.to_owned(), inout, name.to_owned())).collect() }))
+        }
+    }
+    Ok(Json(MoleculeResponse { appearances: Vec::default() }))
+}
+
+#[rocket::get("/molecules")]
+fn molecules_list() -> RawHtml<String> {
+    html! {
+        : Doctype;
+        html {
+            head {
+                meta(charset = "utf-8");
+                title : "Opus Magnum Molecule Database";
+                meta(name = "viewport", content = "width=device-width, initial-scale=1, shrink-to-fit=no");
+                link(rel = "stylesheet", href = "/static/common.css");
+                script(src = "/static/common.js");
+            }
+            body {
+                main {
                     @for (idx, (molecule, appearances)) in molecules::molecules().into_iter().sorted_unstable_by_key(|(_, appearances)| appearances.iter().map(|(_, _, name)| name).min().map(|name| name.to_owned())).enumerate() {
                         div {
                             h2 : appearances.iter().map(|(_, _, name)| name).sorted_unstable().dedup().join("/");
@@ -228,7 +336,6 @@ fn index() -> RawHtml<String> {
                         }
                     }
                 }
-                canvas(id = "next", style = "display: none;");
             }
         }
     }
@@ -253,6 +360,8 @@ fn transmogrification_js() -> RawJavaScript<&'static str> {
 fn rocket() -> _ {
     rocket::build().mount("/", rocket::routes![
         index,
+        molecule_from_state,
+        molecules_list,
         common_css,
         common_js,
         transmogrification_js,
