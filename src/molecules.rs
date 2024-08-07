@@ -34,7 +34,7 @@ pub(crate) fn molecules() -> Vec<(Molecule, Vec<(&'static str, InOut, &'static s
             ("Alchemical Slag", InOut::Reagent, "Alchemical Slag (2)"),
         ]),
         (Molecule { atoms: collect![HexIndex { q: 0, r: 0 } => Atom::Lead, HexIndex { q: 1, r: 0 } => Atom::Salt], bonds: collect![Bond { start: HexIndex { q: 0, r: 0 }, end: HexIndex { q: 1, r: 0 }, ty: BondType::Normal }] }.normalized(), vec![
-            ("Alchemical Slag", InOut::Reagent, "Alchemical Slag"),
+            ("Alchemical Slag", InOut::Reagent, "Alchemical Slag (3)"),
             ("Stabilized Gold*", InOut::Reagent, "Stabilized Lead"),
         ]),
         (Molecule { atoms: collect![HexIndex { q: 0, r: 1 } => Atom::Quicksilver, HexIndex { q: 1, r: 1 } => Atom::Lead, HexIndex { q: 2, r: 0 } => Atom::Quicksilver], bonds: collect![Bond { start: HexIndex { q: 0, r: 1 }, end: HexIndex { q: 1, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 1 }, end: HexIndex { q: 2, r: 0 }, ty: BondType::Normal }] }.normalized(), vec![
