@@ -7,8 +7,8 @@ Wants=network-online.target
 [Service]
 Restart=always
 ExecStart=/home/fenhl/.cargo/bin/molecule-db
-User=www-data
-Group=www-data
+User=fenhl
+Group=fenhl
 WorkingDirectory=/opt/git/github.com/fenhl/molecule-db/main
 
 [Install]
