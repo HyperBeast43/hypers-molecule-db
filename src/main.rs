@@ -340,17 +340,17 @@ fn molecules_list() -> RawHtml<String> {
 
 #[rocket::get("/static/common.css")]
 fn common_css() -> RawCss<&'static str> {
-    RawCss(include_str!("../assets/common.css"))
+    RawCss(include_str!("../assets/static/common.css"))
 }
 
 #[rocket::get("/static/common.js")]
 fn common_js() -> RawJavaScript<&'static str> {
-    RawJavaScript(include_str!("../assets/common.js"))
+    RawJavaScript(include_str!("../assets/static/common.js"))
 }
 
 #[rocket::get("/static/transmogrification.js")]
 fn transmogrification_js() -> RawJavaScript<&'static str> {
-    RawJavaScript(include_str!("../assets/transmogrification.js"))
+    RawJavaScript(include_str!("../assets/static/transmogrification.js"))
 }
 
 #[rocket::launch]
