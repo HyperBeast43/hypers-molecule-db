@@ -356,7 +356,7 @@ fn transmogrification_js() -> RawJavaScript<&'static str> {
 #[rocket::launch]
 fn rocket() -> _ {
     rocket::custom(rocket::Config {
-        port: 42821,
+        port: 24821,
         ..rocket::Config::default()
     }).mount("/", rocket::routes![
         index,
