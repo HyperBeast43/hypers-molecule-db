@@ -439,8 +439,6 @@ function validateState(state) {
         visitBondForValidation(state, result, stack, visited, p, 0, -1);
         visitBondForValidation(state, result, stack, visited, p, 1, -1);
     }
-    if (!result.error && visited.size !== atomPositions.length)
-        result.error = 'all atoms in molecule must be connected by bonds';
     return result;
 }
 function triangular(index) {

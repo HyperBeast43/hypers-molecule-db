@@ -126,10 +126,7 @@ impl MoleculeExt for Molecule {
         }
 
         if self.atoms.values().any(|&atom| atom == Atom::Repeat) {
-            self.translated(HexIndex {
-                q: -self.atoms.keys().map(|&HexIndex { q, .. }| q).min().unwrap_or_default(),
-                r: -self.atoms.keys().map(|&HexIndex { r, .. }| r).min().unwrap_or_default(),
-            })
+            self.position_normalized()
         } else {
             all().map(|rotation| self.rotated(HexIndex::default(), rotation).position_normalized()).min_by(|m1, m2|
                 m1.atoms.iter().sorted_unstable_by(cmp_atoms_ref)._cmp_by(m2.atoms.iter().sorted_unstable_by(cmp_atoms_ref), cmp_atoms)
