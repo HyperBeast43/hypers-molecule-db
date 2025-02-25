@@ -31,10 +31,14 @@ use {
         Deserialize,
         Serialize,
     },
-    crate::util::IteratorExt as _,
+    crate::{
+        unparse::Unparse,
+        util::IteratorExt as _,
+    },
 };
 
 mod molecules;
+mod unparse;
 mod util;
 
 #[derive(Serialize)]
@@ -287,8 +291,10 @@ struct JsState {
 }
 
 #[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
 struct MoleculeResponse {
     appearances: Vec<(String, InOut, String)>,
+    rust_code: String,
 }
 
 #[rocket::post("/api/v1/molecule-from-state", format = "json", data = "<state>")]
@@ -314,12 +320,17 @@ fn molecule_from_state(state: Json<JsState>) -> Result<Json<MoleculeResponse>, S
         }
     }
     let molecule = molecule.normalized();
+    let mut response = MoleculeResponse {
+        appearances: Vec::default(),
+        rust_code: format!("{:?}", Unparse(&molecule)),
+    };
     for (iter_molecule, appearances) in molecules::molecules() {
         if iter_molecule == molecule {
-            return Ok(Json(MoleculeResponse { appearances: appearances.into_iter().map(|(puzzle_name, inout, name)| (puzzle_name.to_owned(), inout, name.to_owned())).collect() }))
+            response.appearances = appearances.into_iter().map(|(puzzle_name, inout, name)| (puzzle_name.to_owned(), inout, name.to_owned())).collect();
+            break
         }
     }
-    Ok(Json(MoleculeResponse { appearances: Vec::default() }))
+    Ok(Json(response))
 }
 
 #[rocket::get("/molecules")]

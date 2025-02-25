@@ -16,6 +16,12 @@ if (-not $?)
     throw 'Native Failure'
 }
 
+ssh fenhl.net env -C /opt/git/github.com/fenhl/molecule-db/main git pull
+if (-not $?)
+{
+    throw 'Native Failure'
+}
+
 ssh fenhl.net sudo systemctl restart molecule-db
 if (-not $?)
 {

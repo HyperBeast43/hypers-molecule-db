@@ -648,6 +648,9 @@ async function updateDownload() {
         let data = await response.json();
         if (data.appearances.length === 0) {
             document.getElementById('result').textContent = 'unknown molecule';
+            document.getElementById('result').addEventListener('click', async function (e) {
+                await navigator.clipboard.writeText(data.rustCode);
+            })
         } else {
             document.getElementById('result').innerHTML = data.appearances
                 .map(JSON.stringify)
