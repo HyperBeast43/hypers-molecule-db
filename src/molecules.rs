@@ -40,6 +40,9 @@ pub(crate) fn molecules() -> Vec<(Molecule, Vec<(&'static str, InOut, &'static s
         (Molecule { atoms: collect![HexIndex { q: 0, r: 1 } => Atom::Salt, HexIndex { q: 0, r: 2 } => Atom::Salt, HexIndex { q: 1, r: 0 } => Atom::Water, HexIndex { q: 1, r: 1 } => Atom::Water, HexIndex { q: 1, r: 2 } => Atom::Vitae, HexIndex { q: 2, r: 0 } => Atom::Mors, HexIndex { q: 2, r: 1 } => Atom::Water, HexIndex { q: 2, r: 2 } => Atom::Water, HexIndex { q: 3, r: 0 } => Atom::Salt, HexIndex { q: 3, r: 1 } => Atom::Salt], bonds: collect![Bond { start: HexIndex { q: 0, r: 1 }, end: HexIndex { q: 0, r: 2 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 0, r: 1 }, end: HexIndex { q: 1, r: 0 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 0, r: 2 }, end: HexIndex { q: 1, r: 2 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 0 }, end: HexIndex { q: 1, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 1 }, end: HexIndex { q: 2, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 2, r: 0 }, end: HexIndex { q: 3, r: 0 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 2, r: 1 }, end: HexIndex { q: 2, r: 2 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 2, r: 2 }, end: HexIndex { q: 3, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 3, r: 0 }, end: HexIndex { q: 3, r: 1 }, ty: BondType::Normal }] }, vec![
             ("Animismus Buffer", InOut::Product, "Animismus Buffer"),
         ]),
+        (Molecule { atoms: collect![HexIndex { q: 0, r: 0 } => Atom::Silver, HexIndex { q: 0, r: 1 } => Atom::Salt, HexIndex { q: 1, r: 1 } => Atom::Salt, HexIndex { q: 2, r: 0 } => Atom::Silver], bonds: collect![Bond { start: HexIndex { q: 0, r: 0 }, end: HexIndex { q: 0, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 0, r: 1 }, end: HexIndex { q: 1, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 1 }, end: HexIndex { q: 2, r: 0 }, ty: BondType::Normal }] }, vec![
+            ("Thermic Capacitor*", InOut::Product, "Argentic Glass"),
+        ]),
         (Molecule { atoms: collect![HexIndex { q: 0, r: 0 } => Atom::Iron, HexIndex { q: 1, r: 0 } => Atom::Iron, HexIndex { q: 2, r: 0 } => Atom::Repeat], bonds: collect![Bond { start: HexIndex { q: 0, r: 0 }, end: HexIndex { q: 1, r: 0 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 0 }, end: HexIndex { q: 2, r: 0 }, ty: BondType::Normal }] }, vec![
             ("Armor Filament", InOut::Product, "Armor Filament"),
         ]),
@@ -172,6 +175,7 @@ pub(crate) fn molecules() -> Vec<(Molecule, Vec<(&'static str, InOut, &'static s
             ("Visillary Anaesthetic", InOut::Reagent, "Distilled Water"),
             ("Animismus Buffer", InOut::Reagent, "Distilled Water"),
             ("Hot Ice*", InOut::Reagent, "Purified Water"),
+            ("Hydrophobic Water*", InOut::Reagent, "Distilled Water"),
         ]),
         (Molecule { atoms: collect![HexIndex { q: 0, r: 0 } => Atom::Salt, HexIndex { q: 0, r: 1 } => Atom::Salt, HexIndex { q: 1, r: 0 } => Atom::Earth], bonds: collect![Bond { start: HexIndex { q: 0, r: 0 }, end: HexIndex { q: 0, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 0, r: 0 }, end: HexIndex { q: 1, r: 0 }, ty: BondType::Normal }] }, vec![
             ("Van Berlo's Pivots", InOut::Product, "Earth Pivot"),
@@ -200,6 +204,7 @@ pub(crate) fn molecules() -> Vec<(Molecule, Vec<(&'static str, InOut, &'static s
             ("Resonant Crystal", InOut::Reagent, "Elemental Copper"),
             ("Film Crystal*", InOut::Reagent, "Elemental Copper"),
             ("Dark Matter Candidate*", InOut::Reagent, "Elemental Copper"),
+            ("Thermic Capacitor*", InOut::Reagent, "Elemental Copper"),
         ]),
         (Molecule { atoms: collect![HexIndex { q: 0, r: 0 } => Atom::Earth], bonds: collect![] }, vec![
             ("Face Powder", InOut::Reagent, "Elemental Earth"),
@@ -238,6 +243,7 @@ pub(crate) fn molecules() -> Vec<(Molecule, Vec<(&'static str, InOut, &'static s
             ("Warp Fuel*", InOut::Reagent, "Elemental Fire"),
             ("Dark Matter Candidate*", InOut::Reagent, "Elemental Fire"),
             ("Simulacrum*", InOut::Reagent, "Elemental Fire"),
+            ("Thermic Capacitor*", InOut::Reagent, "Elemental Fire"),
         ]),
         (Molecule { atoms: collect![HexIndex { q: 0, r: 0 } => Atom::Gold], bonds: collect![] }, vec![
             ("Refined Gold", InOut::Product, "Elemental Gold (1)"),
@@ -316,6 +322,7 @@ pub(crate) fn molecules() -> Vec<(Molecule, Vec<(&'static str, InOut, &'static s
             ("Look-And-Say*", InOut::Reagent, "Elemental Quicksilver"),
             ("Faero Filament*", InOut::Reagent, "Elemental Quicksilver"),
             ("Tinsel*", InOut::Reagent, "Elemental quicksilver"),
+            ("Thermic Capacitor*", InOut::Reagent, "Elemental Quicksilver"),
         ]),
         (Molecule { atoms: collect![HexIndex { q: 0, r: 0 } => Atom::Quintessence], bonds: collect![] }, vec![
             ("Proof of Completeness", InOut::Reagent, "Elemental Quintessence"),
@@ -504,6 +511,9 @@ pub(crate) fn molecules() -> Vec<(Molecule, Vec<(&'static str, InOut, &'static s
         (Molecule { atoms: collect![HexIndex { q: 0, r: 0 } => Atom::Vitae, HexIndex { q: 0, r: 1 } => Atom::Salt, HexIndex { q: 1, r: 1 } => Atom::Water, HexIndex { q: 1, r: 2 } => Atom::Salt, HexIndex { q: 2, r: 0 } => Atom::Vitae], bonds: collect![Bond { start: HexIndex { q: 0, r: 0 }, end: HexIndex { q: 0, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 0, r: 1 }, end: HexIndex { q: 1, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 1 }, end: HexIndex { q: 1, r: 2 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 1 }, end: HexIndex { q: 2, r: 0 }, ty: BondType::Normal }] }, vec![
             ("Health Tonic", InOut::Product, "Health Tonic"),
         ]),
+        (Molecule { atoms: collect![HexIndex { q: 0, r: 0 } => Atom::Quicksilver, HexIndex { q: 0, r: 1 } => Atom::Fire, HexIndex { q: 1, r: 1 } => Atom::Fire, HexIndex { q: 2, r: 0 } => Atom::Quicksilver], bonds: collect![Bond { start: HexIndex { q: 0, r: 0 }, end: HexIndex { q: 0, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 0, r: 1 }, end: HexIndex { q: 1, r: 1 }, ty: BondType::Triplex { red: true, black: true, yellow: true } }, Bond { start: HexIndex { q: 1, r: 1 }, end: HexIndex { q: 2, r: 0 }, ty: BondType::Normal }] }, vec![
+            ("Thermic Capacitor*", InOut::Product, "Heat-Preserving Component"),
+        ]),
         (Molecule { atoms: collect![HexIndex { q: 0, r: 1 } => Atom::Salt, HexIndex { q: 0, r: 2 } => Atom::Salt, HexIndex { q: 1, r: 0 } => Atom::Salt, HexIndex { q: 1, r: 2 } => Atom::Salt, HexIndex { q: 2, r: 0 } => Atom::Salt, HexIndex { q: 2, r: 1 } => Atom::Salt], bonds: collect![Bond { start: HexIndex { q: 0, r: 1 }, end: HexIndex { q: 0, r: 2 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 0, r: 1 }, end: HexIndex { q: 1, r: 0 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 0, r: 2 }, end: HexIndex { q: 1, r: 2 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 0 }, end: HexIndex { q: 2, r: 0 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 2 }, end: HexIndex { q: 2, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 2, r: 0 }, end: HexIndex { q: 2, r: 1 }, ty: BondType::Normal }] }, vec![
             ("Hexstabilized Salt", InOut::Product, "Hexstabilized Salt"),
         ]),
@@ -515,6 +525,9 @@ pub(crate) fn molecules() -> Vec<(Molecule, Vec<(&'static str, InOut, &'static s
         ]),
         (Molecule { atoms: collect![HexIndex { q: 0, r: 1 } => Atom::Salt, HexIndex { q: 0, r: 2 } => Atom::Salt, HexIndex { q: 1, r: 0 } => Atom::Salt, HexIndex { q: 1, r: 1 } => Atom::Water, HexIndex { q: 1, r: 2 } => Atom::Salt, HexIndex { q: 2, r: 0 } => Atom::Salt, HexIndex { q: 2, r: 1 } => Atom::Salt], bonds: collect![Bond { start: HexIndex { q: 0, r: 1 }, end: HexIndex { q: 0, r: 2 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 0, r: 1 }, end: HexIndex { q: 1, r: 0 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 0, r: 1 }, end: HexIndex { q: 1, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 0, r: 2 }, end: HexIndex { q: 1, r: 2 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 0 }, end: HexIndex { q: 2, r: 0 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 1 }, end: HexIndex { q: 1, r: 2 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 1 }, end: HexIndex { q: 2, r: 0 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 2 }, end: HexIndex { q: 2, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 2, r: 0 }, end: HexIndex { q: 2, r: 1 }, ty: BondType::Normal }] }, vec![
             ("Hexstabilized Salt", InOut::Reagent, "Hydrated Hexstabilized Salt"),
+        ]),
+        (Molecule { atoms: collect![HexIndex { q: 0, r: 1 } => Atom::Air, HexIndex { q: 1, r: 0 } => Atom::Earth, HexIndex { q: 1, r: 1 } => Atom::Salt, HexIndex { q: 2, r: 0 } => Atom::Air, HexIndex { q: 2, r: 1 } => Atom::Water, HexIndex { q: 2, r: 2 } => Atom::Salt, HexIndex { q: 2, r: 3 } => Atom::Air, HexIndex { q: 3, r: 1 } => Atom::Air, HexIndex { q: 3, r: 2 } => Atom::Earth], bonds: collect![Bond { start: HexIndex { q: 0, r: 1 }, end: HexIndex { q: 1, r: 0 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 0 }, end: HexIndex { q: 1, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 0 }, end: HexIndex { q: 2, r: 0 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 1 }, end: HexIndex { q: 2, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 2, r: 1 }, end: HexIndex { q: 2, r: 2 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 2, r: 2 }, end: HexIndex { q: 3, r: 2 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 2, r: 3 }, end: HexIndex { q: 3, r: 2 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 3, r: 1 }, end: HexIndex { q: 3, r: 2 }, ty: BondType::Normal }] }, vec![
+            ("Hydrophobic Water*", InOut::Product, "Hydrophobic Water"),
         ]),
         (Molecule { atoms: collect![HexIndex { q: 0, r: 2 } => Atom::Water, HexIndex { q: 0, r: 4 } => Atom::Water, HexIndex { q: 1, r: 2 } => Atom::Earth, HexIndex { q: 1, r: 3 } => Atom::Earth, HexIndex { q: 2, r: 0 } => Atom::Water, HexIndex { q: 2, r: 1 } => Atom::Earth, HexIndex { q: 2, r: 3 } => Atom::Earth, HexIndex { q: 2, r: 4 } => Atom::Water, HexIndex { q: 3, r: 1 } => Atom::Earth, HexIndex { q: 3, r: 2 } => Atom::Earth, HexIndex { q: 4, r: 0 } => Atom::Water, HexIndex { q: 4, r: 2 } => Atom::Water], bonds: collect![Bond { start: HexIndex { q: 0, r: 2 }, end: HexIndex { q: 1, r: 2 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 0, r: 4 }, end: HexIndex { q: 1, r: 3 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 2 }, end: HexIndex { q: 1, r: 3 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 2 }, end: HexIndex { q: 2, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 1, r: 3 }, end: HexIndex { q: 2, r: 3 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 2, r: 0 }, end: HexIndex { q: 2, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 2, r: 1 }, end: HexIndex { q: 3, r: 1 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 2, r: 3 }, end: HexIndex { q: 2, r: 4 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 2, r: 3 }, end: HexIndex { q: 3, r: 2 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 3, r: 1 }, end: HexIndex { q: 4, r: 0 }, ty: BondType::Normal }, Bond { start: HexIndex { q: 3, r: 2 }, end: HexIndex { q: 4, r: 2 }, ty: BondType::Normal }] }, vec![
             ("Hydroponic Solution*", InOut::Product, "Hydroponic Solution"),
