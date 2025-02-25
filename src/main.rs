@@ -262,6 +262,16 @@ fn index() -> RawHtml<String> {
                     }
                 }
                 canvas(id = "next", style = "display: none;");
+                footer {
+                    p {
+                        : "hosted by ";
+                        a(href = "https://fenhl.net/") : "Fenhl";
+                        : " • ";
+                        a(href = "https://fenhl.net/disc") : "disclaimer";
+                        : " • ";
+                        a(href = "https://github.com/fenhl/molecule-db") : "source code";
+                    }
+                }
             }
         }
     }
